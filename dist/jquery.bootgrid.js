@@ -1745,6 +1745,29 @@
     {
         return $.merge([], this.currentRows);
     };
+    
+    /**
+     * Returns all the rows
+     * @method getRows
+     * @returns {Array} All the rows
+     */
+    Grid.prototype.getRows = function(){
+        return $.merge([], this.rows);
+    };
+    
+    /**
+     * Select all rows, even the invisible ones
+     * @method selectAllRows
+     */
+    Grid.prototype.selectAllRows = function(){
+        var that = this;
+        for(var i in this.rows){
+            var row=this.rows[i];
+            if(row.id!==undefined){
+                that.select([row.id]);
+            }
+        }
+    };
 
     /**
      * Gets a number represents the row count per page.
