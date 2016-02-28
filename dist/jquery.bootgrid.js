@@ -284,13 +284,28 @@
                 {
                     row[column.id] = column.converter.from(cells.eq(i).text());
                 });
-
+                //Get the row attributes
+                var attr=stringAttributes($this);
+                row.attr=attr;
                 appendRow.call(that, row);
             });
 
             setTotals.call(this, this.rows.length);
             sortRows.call(this);
         }
+    }
+    
+    /**
+     * Returns the element's attribute list in a string
+     * @param {element} element Row to check
+     * @returns {string} String with elements
+     */
+    function stringAttributes(element){
+        var string="";
+        $(element[0].attributes).each(function() {
+            string+=' '+this.nodeName+'="'+this.nodeValue+'" ';
+        });
+        return string;
     }
 
     function setTotals(total)
@@ -596,7 +611,8 @@
                 var cells = "",
                     rowAttr = " data-row-id=\"" + ((that.identifier == null) ? index : row[that.identifier]) + "\"",
                     rowCss = "";
-
+                //Add attributes to the new row
+                rowAttr += row.attr;
                 if (that.selection)
                 {
                     var selected = ($.inArray(row[that.identifier], that.selectedRows) !== -1),
@@ -1728,6 +1744,29 @@
     Grid.prototype.getCurrentRows = function()
     {
         return $.merge([], this.currentRows);
+    };
+    
+    /**
+     * Returns all the rows
+     * @method getRows
+     * @returns {Array} All the rows
+     */
+    Grid.prototype.getRows = function(){
+        return $.merge([], this.rows);
+    };
+    
+    /**
+     * Select all rows, even the invisible ones
+     * @method selectAllRows
+     */
+    Grid.prototype.selectAllRows = function(){
+        var that = this;
+        for(var i in this.rows){
+            var row=this.rows[i];
+            if(row.id!==undefined){
+                that.select([row.id]);
+            }
+        }
     };
 
     /**
